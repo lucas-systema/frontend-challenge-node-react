@@ -15605,7 +15605,8 @@ export class DBMock {
         }
     ]
 
-    list(params) {
+    /* list(params) {
+
         const cleanWord = (word) => {
             // eliminando acentuação
             word = word.replace(/[àáâãäå]/, "a");
@@ -15617,31 +15618,42 @@ export class DBMock {
             return word.replace(/[^a-z0-9]/gi, '');
         }
 
-        return Array.from(this.#users.values())
-            .filter(user => {
-                //Pesquisa por estado
-                if (Object.keys(params).length > 0 && params.state && !params.name) {
-                    return cleanWord(user?.location?.state?.toLocaleLowerCase())
-                        .includes(cleanWord(params.state.toLocaleLowerCase()))
-                }
-                return true
-            })
-            .filter(user => {
-                //Pesquisa por nome
-                if (Object.keys(params).length > 0 && params.name && !params.state) {
-                    return user.name.first.includes(params.name) || user.name.last.includes(params.name)
-                }
-                return true
-            })
-            .filter(user => {
-                //Pesquisa por nome
-                if (Object.keys(params).length > 0 && params.name && params.state) {
-                    return user.name.first.includes(params.name) || user.name.last.includes(params.name) &&
-                        cleanWord(user?.location?.state?.toLocaleLowerCase())
-                            .includes(cleanWord(params.state.toLocaleLowerCase()))
-                }
-                return true
-            })
+        const paginatedResults = (model, page, limit) => {
+            let newResults = []
+
+            page = parseInt(page || 1);
+            limit = parseInt(limit || 10);
+
+            // calculating the starting and ending index
+            const startIndex = (page - 1) * limit;
+            const endIndex = page * limit;
+
+            const results = {};
+            if (endIndex < model.length) {
+                results.next = {
+                    page: page + 1,
+                    limit: limit
+                };
+            }
+
+            if (startIndex > 0) {
+                results.previous = {
+                    page: page - 1,
+                    limit: limit
+                };
+            }
+
+            results.results = model.slice(startIndex, endIndex);
+
+            newResults = results;
+
+            return newResults
+        }
+
+        let returnData = paginatedResults(Array.from(this.#users.values()), params.page, params.limit);
+
+        return returnData
+
     }
 
     search() {
@@ -15669,5 +15681,5 @@ export class DBMock {
     delete(id) {
         this.#users.delete(id)
     }
-
+ */
 }
