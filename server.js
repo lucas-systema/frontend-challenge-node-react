@@ -3,13 +3,16 @@ import cors from '@fastify/cors'
 import { ChallengeApi } from './api.js'
 //import { DBMock } from './db-mock.js'
 import axios from 'axios'
-import 'dotenv/config'
+
+const { NODE_ENV_PORT, NODE_ENV_HOST } = process.env
 
 const fastify = Fastify({ logger: true })
 await fastify.register(cors, {
     origin: '*'
 })
-const PORT = 3001
+const PORT = NODE_ENV_PORT
+const HOST = NODE_ENV_HOST
+
 const challengeApi = new ChallengeApi()
 //const challengeApi = new DBMock()
 
@@ -60,7 +63,7 @@ fastify.delete('/user/:id', function (request, reply) {
     return reply.status(204).send()
 })
 
-fastify.listen({ port: PORT }, function (err, address) {
+fastify.listen({ port: PORT, host: HOST }, function (err, address) {
     if (err) {
         fastify.log.error(err)
         process.exit(1)
